@@ -1,5 +1,3 @@
-
-
 services:
   backend:
     build:
@@ -14,18 +12,18 @@ services:
     command: npm run dev
     environment:
       DATABASE_URL: postgresql://postgresSECOMP:postgresSECOMP2026@db:5432/secomp?schema=public
+      JWT_SECRET: secomp_secret_key_2026
     depends_on:
       db:
         condition: service_started
-  
-  # frontend:
-  #   build: ./frontend
-  #   container_name: secomp_frontend
-  #   volumes:
-  #     - ./frontend/app
-  #   stdin_open: true
-  #   tty: true
 
+  frontend:
+    build: ./frontend
+    container_name: secomp_frontend
+    volumes:
+      - ./frontend:/app
+    stdin_open: true
+    tty: true
 
   db:
     image: postgres:15
@@ -35,16 +33,15 @@ services:
       POSTGRES_PASSWORD: postgresSECOMP2026
       POSTGRES_DB: secomp
     ports:
-      - 5432:5432
+      - 5438:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    
+
   docs:
     build: ./docs
     container_name: secomp-docs
     ports:
       - "8080:8080"
 
-
 volumes:
-    postgres_data:
+  postgres_data:

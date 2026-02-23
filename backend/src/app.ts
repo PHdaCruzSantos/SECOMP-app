@@ -1,16 +1,19 @@
 import express from 'express';
-import dotenv from 'dotenv';
-import type { Request, Response } from 'express';
+import userRouter from "./routes/userRoutes";
+import eventRouter from "./modules/events/event.routes"
 
-dotenv.config();
+import morgan from "morgan";
 
 const app = express();
-const port = process.env.PORT || 3000;
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Backend is running!');
+app.use(morgan("dev"));
+app.use(express.json());
+
+app.use("/api/user", userRouter)
+app.use("/api/events", eventRouter)
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: 'ok' });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+export default app
